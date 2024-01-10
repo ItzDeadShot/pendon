@@ -1,0 +1,16 @@
+.pendon-logo {
+    font-weight: 900;
+    font-size: 25px;
+    letter-spacing: -1px;
+    color: black;
+}
+.pendon-logo span {
+    color: red;
+    font-weight: 300;
+}
+.pendon-logo:hover {
+    color: yellow;
+}
+.pendon-logo .logo-light {
+    color: #eef4ff;
+}
