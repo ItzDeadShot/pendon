@@ -16,6 +16,11 @@ use Illuminate\Support\Facades\Hash;
 
 class ItemController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:donor|admin', ['only' => ['index', 'show', 'create', 'store', 'edit', 'update', 'destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      *

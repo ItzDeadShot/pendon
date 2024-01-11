@@ -10,9 +10,15 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:admin', ['only' => ['index', 'show', 'create', 'store', 'edit', 'update', 'destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -42,27 +48,32 @@ class UserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'unique:users,email'],
-            'password' => ['required','confirmed', 'min:8'],
-            'roles' => ['required', 'array'],
-        ]);
+        try {
+            $request->validate([
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'email', 'unique:users,email'],
+                'password' => ['required','confirmed', 'min:8'],
+                'roles' => ['required', 'array'],
+            ]);
 
-        $user = User::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password')),
-        ]);
+            $user = User::create([
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'password' => Hash::make($request->input('password')),
+            ]);
 
-//        if (!$user) {
-//            return redirect()->back()->with('error','Something went wrong!');
-//        }
+            if (!$user) {
+                return redirect()->back()->with('error','Something went wrong!');
+            }
 
-        // Attach roles to the user
-        $user->syncRoles($request->input('roles'));
+            // Attach roles to the user
+            $user->syncRoles($request->input('roles'));
 
-        return redirect()->route('users.index')->with('success','User has been created successfully.');
+            return redirect()->route('users.index')->with('success','User has been created successfully.');
+        } catch (\Exception $e) {
+            Log::log('error',$e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     /**

@@ -42,9 +42,19 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        $user->assignRole('donee');
+
         event(new Registered($user));
 
         Auth::login($user);
+
+        if ($user->isDonee()) {
+            return redirect()->route('/');
+        }
+
+        if ($user->isDonor()) {
+            return redirect()->route('items');
+        }
 
         return redirect(RouteServiceProvider::HOME);
     }

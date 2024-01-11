@@ -16,11 +16,11 @@ $(function() {
         },
         password: {
           required: true,
-          minlength: 5
+          minlength: 8
         },
         confirm_password: {
           required: true,
-          minlength: 5,
+          minlength: 8,
           equalTo: "#password"
         },
         email: {

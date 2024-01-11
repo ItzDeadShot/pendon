@@ -15,6 +15,11 @@ use Illuminate\Http\Request;
 
 class RequestController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:donor|admin', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -88,12 +93,16 @@ class RequestController extends Controller
                 'description' => 'required|string|max:100',
                 'email' => 'required|email',
                 'phone' => 'required',
-                'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Adjust the allowed file types and size
+                'image' => 'required|image|sometimes|mimes:jpeg,png,jpg,gif|max:2048', // Adjust the allowed file types and size
                 'item_id' => 'required|exists:items,id',
             ]);
 
             // Handle file upload
-            $imagePath = $request->file('image')->store('images', 'public');
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('images', 'public');
+            } else {
+                $imagePath = null;
+            }
 
 
             $req = \App\Models\Request::create([

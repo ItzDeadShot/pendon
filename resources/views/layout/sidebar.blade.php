@@ -11,13 +11,21 @@
   </div>
   <div class="sidebar-body">
     <ul class="nav">
-      <li class="nav-item nav-category">Resource Management</li>
         <li class="nav-item {{ active_class(['admin/users']) }}">
-            <a href="{{ url('/users') }}" class="nav-link">
-                <i class="link-icon" data-feather="user"></i>
-                <span class="link-title">User Management</span>
+            <a href="{{ url('/') }}" class="nav-link">
+                <i class="link-icon" data-feather="home"></i>
+                <span class="link-title">Home</span>
             </a>
         </li>
+      <li class="nav-item nav-category">Resource Management</li>
+        @if(auth()->user()->isAdmin())
+            <li class="nav-item {{ active_class(['admin/users']) }}">
+                <a href="{{ url('/users') }}" class="nav-link">
+                    <i class="link-icon" data-feather="user"></i>
+                    <span class="link-title">User Management</span>
+                </a>
+            </li>
+        @endif
         <li class="nav-item {{ active_class(['admin/users']) }}">
             <a href="{{ route('items.index') }}" class="nav-link">
                 <i class="link-icon" data-feather="box"></i>
