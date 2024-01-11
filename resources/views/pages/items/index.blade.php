@@ -8,8 +8,8 @@
 @section('content')
     <nav class="page-breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Tables</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Data Table</li>
+            <li class="breadcrumb-item"><a href="{{ route('items.index') }}">Item Management</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Items</li>
         </ol>
     </nav>
     @if(session('success'))

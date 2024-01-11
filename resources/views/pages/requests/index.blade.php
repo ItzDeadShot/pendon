@@ -9,8 +9,8 @@
 @section('content')
     <nav class="page-breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Tables</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Data Table</li>
+            <li class="breadcrumb-item"><a href="{{ route('requests.index') }}">Request Management</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Requests</li>
         </ol>
     </nav>
     @if(session('success'))
