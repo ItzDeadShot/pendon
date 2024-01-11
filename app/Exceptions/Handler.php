@@ -22,14 +22,12 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $e)
     {
         if ($e instanceof UnauthorizedException) {
-            return response()->view("error.403", [
+            return response()->view("errors.403", [
                 "exception" => $e
             ], 403);
         }
         return parent::render($request, $e);
     }
-
-
 
     /**
      * Register the exception handling callbacks for the application.

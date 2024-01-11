@@ -27,8 +27,18 @@ class RequestController extends Controller
      */
     public function index(): Application|View|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $reqs = Req::all();
-        $items = Item::all();
+        $user = auth()->user();
+
+        if ($user->isAdmin()) {
+            $reqs = Req::all();
+            $items = Item::all();
+        } else {
+            $reqs = Req::whereHas('item', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })->get();
+            $items = Item::where('user_id', $user->id)->get();
+        }
+
         return view('pages.requests.index', compact('reqs', 'items'));
     }
 

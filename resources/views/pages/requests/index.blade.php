@@ -23,7 +23,9 @@
             <div class="card">
                 <div class="card-body">
                     <h6 class="card-title">Request Management</h6>
-                    <a href="javascript:void(0)" class="btn btn-success mb-2" id="new-customer" data-toggle="modal" data-target="#createModal">New Request</a>
+                    @if(auth()->user()->isAdmin())
+                        <a href="javascript:void(0)" class="btn btn-success mb-2" id="new-customer" data-toggle="modal" data-target="#createModal">New Request</a>
+                    @endif
                     <div class="table-responsive">
                         <table id="dataTableRequests" class="table">
                             <thead>
@@ -43,7 +45,11 @@
                                     <td>{{ $req->status }}</td>
                                     <td>{{ $req->description }}</td>
                                     <td>
-                                        <img alt="Request Picture" class="img-fluid" src="{{ asset('/'.$req->proof) }}">
+                                        @if($req->proof === null)
+                                            <img alt="N/A" class="img-fluid" src="{{ asset('images/na.jpg') }}">
+                                        @else
+                                            <img alt="Request Picture" class="img-fluid" src="{{ asset('/'.$req->proof) }}">
+                                        @endif
                                     </td>
                                     <td>
                                         <a class="btn btn-info show-item" data-id="{{ $req->item_id }}" data-toggle="modal" data-target="#showModal" href="javascript:void(0)">Show</a>
@@ -298,7 +304,10 @@
                         itemDetailsHtml += '<p><strong>Email:</strong> ' + data.email + '</p>';
                         itemDetailsHtml += '<p><strong>Phone:</strong> ' + data.phone + '</p>';
                         itemDetailsHtml += '<p><strong>Description:</strong> ' + data.description + '</p>';
-                        itemDetailsHtml += '<p><strong>Proof:</strong></p> <br>' + '<img alt="Request Picture" class="img-fluid" src="/' + data.proof + '" >';
+                        if (data.proof === null)
+                            itemDetailsHtml += '<p><strong>Proof:</strong></p> <br>' + '<img alt="N/A" class="img-fluid" src="{{ asset('images/na.jpg') }}" >';
+                        else
+                            itemDetailsHtml += '<p><strong>Proof:</strong></p> <br>' + '<img alt="Request Picture" class="img-fluid" src="/' + data.proof + '" >';
                         $('#showModalBody').html(itemDetailsHtml);
                     },
                     error: function (error) {

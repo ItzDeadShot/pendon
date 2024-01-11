@@ -28,7 +28,11 @@ class ItemController extends Controller
      */
     public function index(): Application|View|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $items = Item::all()->except(Auth::id());
+        if (auth()->user()->isAdmin()) {
+            $items = Item::all();
+        } else {
+            $items = Item::where('user_id', Auth::id())->get();
+        }
         return view('pages.items.index', compact('items'));
     }
 

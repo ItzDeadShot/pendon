@@ -38,9 +38,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     // Resource CRUD
-    Route::resource('users', UserController::class);
-    Route::resource('items', ItemController::class);
-    Route::resource('requests', RequestController::class);
+    Route::resource('users', UserController::class)->except(['create', 'edit']);
+    Route::resource('items', ItemController::class)->except(['create']);
+    Route::resource('requests', RequestController::class)->except(['create', 'edit']);
 
     Route::post('/requests/request-item', [RequestController::class, 'storeFromItems'])->name('requests.item.store');
 });
