@@ -23,6 +23,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'proof',
+        'email_verified_at',
     ];
 
     /**
@@ -76,5 +78,13 @@ class User extends Authenticatable
         return $this->hasRole('donee');
     }
 
+    public function isVerified ()
+    {
+        if ($this->email_verified_at) {
+            return true;
+        }
+
+        return false;
+    }
 
 }

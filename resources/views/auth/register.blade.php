@@ -1,5 +1,9 @@
 @extends('layout.master2')
 
+@push('plugin-styles')
+    <link href="{{ asset('assets/plugins/dropify/css/dropify.min.css') }}" rel="stylesheet" />
+@endpush
+
 @section('content')
     <div class="page-content d-flex align-items-center justify-content-center">
         <div class="row w-100 mx-0 auth-page">
@@ -13,9 +17,9 @@
                         </div>
                         <div class="col-md-8 pl-md-0">
                             <div class="auth-form-wrapper px-4 py-5">
-                                <a href="#" class="noble-ui-logo logo-light d-block mb-2">Pen<span>Don</span></a>
+                                <a href="{{ route("/") }}" class="noble-ui-logo logo-light d-block mb-2">Pen<span>Don</span></a>
                                 <h5 class="text-muted font-weight-normal mb-4">Create a free account.</h5>
-                                <form method="POST" action="{{ route('register') }}">
+                                <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
                                     @csrf
 
                                     <!-- Name -->
@@ -61,6 +65,16 @@
                                         <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
                                     </div>
 
+                                    <!-- ID -->
+                                    <div class="stretch-card mt-3">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h6 class="card-title">Upload ID Proof</h6>
+                                                <input type="file" id="myDropify" name="image" class="border" required/>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <x-primary-button class="mt-3">
                                         {{ __('Register') }}
                                     </x-primary-button>
@@ -74,3 +88,10 @@
         </div>
     </div>
 @endsection
+@push('plugin-scripts')
+    <script src="{{ asset('assets/plugins/dropify/js/dropify.min.js') }}"></script>
+@endpush
+
+@push("custom-scripts")
+    <script src="{{ asset('assets/js/dropify.js') }}"></script>
+@endpush

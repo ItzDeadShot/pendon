@@ -38,13 +38,17 @@
                     <img src="{{ $item->photo_path }}" alt="{{ $item->name }}" class="w-full h-32 object-cover mb-4 rounded-md">
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">{{ $item->name }}</h3>
                     <p class="text-gray-500 dark:text-gray-400">{{ $item->description }}</p>
-                    <p class="text-gray-500 dark:text-gray-400 font-bold">Price: RM {{ $item->price }}</p>
+{{--                    <p class="text-gray-500 dark:text-gray-400 font-bold">Price: RM {{ $item->price }}</p>--}}
                     @guest
                         <p class="mt-4 text-gray-500 dark:text-gray-400">Please <a href="{{ route('login') }}" class="font-bold" style="color: #b91c1c;">login</a> to request this item.</p>
                     @else
-                        <button data-modal-target="request-modal" data-modal-toggle="request-modal" data-item-price="{{ $item->price }}" data-item-id="{{ $item->id }}" class="mt-4 bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 text-white font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
-                            Request
-                        </button>
+                        @if(auth()->user()->isVerified())
+                            <button data-modal-target="request-modal" data-modal-toggle="request-modal" data-item-price="{{ $item->price }}" data-item-id="{{ $item->id }}" class="mt-4 bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 text-white font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
+                                Request
+                            </button>
+                        @else
+                            <p class="mt-4 text-gray-500 dark:text-gray-400">Please <a href="{{ route('login') }}" class="font-bold" style="color: #b91c1c;">contact</a> the admin to complete verification.</p>
+                        @endif
                     @endguest
 
                 </div>
@@ -95,10 +99,10 @@
                                 <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
                                 <input type="email" id="email" name="email" class="mt-1 p-2 w-full border rounded-md" placeholder="Enter your email" required>
                         </div>
-                        <div class="mb-4" id="proof">
-                            <label for="proof" class="block text-sm font-medium text-gray-700">Upload Proof (Image)</label>
-                            <input type="file" id="proof" name="image" class="border"/>
-                        </div>
+{{--                        <div class="mb-4" id="proof">--}}
+{{--                            <label for="proof" class="block text-sm font-medium text-gray-700">Upload Proof (Image)</label>--}}
+{{--                            <input type="file" id="proof" name="image" class="border"/>--}}
+{{--                        </div>--}}
                     </div>
                     <!-- Modal footer -->
                     <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
@@ -117,15 +121,7 @@
                 document.querySelectorAll('[data-modal-target]').forEach(item => {
                     // When a button is clicked, update the hidden input with the corresponding item id
                     item.addEventListener('click', () => {
-                        const itemId = item.getAttribute('data-item-id');
-                        const itemPrice = item.getAttribute('data-item-price');
-                        if (itemPrice >= 100) {
-                            document.getElementById('proof').style.display = 'block';
-                        } else {
-                            document.getElementById('proof').style.display = 'none';
-                        }
-
-                        document.getElementById('request-item-id').value = itemId;
+                        document.getElementById('request-item-id').value = item.getAttribute('data-item-id');
                     });
                 });
 

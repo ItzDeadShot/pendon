@@ -91,6 +91,7 @@ class UserController extends Controller
                 'name' => $user->name,
                 'email' => $user->email,
                 'roles' => $user->getRoleNames(),
+                'proof' => $user->proof,
             ];
             return response()->json($userData);
 
@@ -129,6 +130,39 @@ class UserController extends Controller
         $user->fill($request->post())->save();
 
         return redirect()->route('users.index')->with('success','User Has Been updated successfully');
+    }
+
+    /**
+     * Approve the specified resource in storage.
+     *
+     * @param User $user
+     * @return RedirectResponse
+     */
+    public function approve(User $user): RedirectResponse
+    {
+        $user->update(['email_verified_at' => now()]);
+        return redirect()->route('users.index')->with('success','User has been approved successfully');
+    }
+
+    /**
+     * Reject the specified resource in storage.
+     *
+     * @param User $user
+     * @return RedirectResponse
+     */
+    public function reject(User $user): RedirectResponse
+    {
+        try {
+            $user->update(['email_verified_at' => null]);
+
+            return redirect()->route('users.index')->with('success', 'User has been rejected successfully');
+        } catch (\Exception $e) {
+            // Log the exception for debugging
+            \Log::error('Error rejecting user: ' . $e->getMessage());
+
+            // Redirect with an error message
+            return redirect()->route('users.index')->with('error', 'Error rejecting user. Please try again.');
+        }
     }
 
     /**

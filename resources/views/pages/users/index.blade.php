@@ -34,6 +34,7 @@
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Role</th>
+                                <th>Approved?</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
@@ -44,14 +45,16 @@
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
                                     <td>{{ implode(', ', $user->getRoleNames()->toArray()) }}</td>
+                                    <td>{{ $user->email_verified_at ? 'Yes' : 'No' }}</td>
                                     <td>
-                                        <form action="{{ route('users.destroy',$user->id) }}" method="Post">
-                                            <a class="btn btn-info show-user" data-id="{{ $user->id }}" data-toggle="modal" data-target="#showModal" href="javascript:void(0)">Show</a>
-{{--                                            <a class="btn btn-primary" data-id="{{ $user->id }}" data-toggle="modal"  href="{{ route('users.edit',$user->id) }}">Edit</a>--}}
-{{--                                            <a class="btn btn-primary" data-id="{{ $user->id }}" data-toggle="modal" data-target="#editModal" href="javascript:void(0)">Edit</a>--}}
+                                        <form action="{{ $user->email_verified_at ? route('users.reject',$user->id) : route('users.approve', $user->id) }}" method="Post">
                                             @csrf
-{{--                                            @method('DELETE')--}}
-{{--                                            <button type="submit" class="btn btn-danger">Delete</button>--}}
+                                        <a class="btn btn-info show-user" data-id="{{ $user->id }}" data-toggle="modal" data-target="#showModal" href="javascript:void(0)">Show</a>
+                                            @if($user->isVerified())
+                                                <button type="submit" class="btn btn-danger">Reject</button>
+                                            @else
+                                                <button type="submit" class="btn btn-primary">Approve</button>
+                                            @endif
                                         </form>
                                     </td>
                                 </tr>
@@ -130,7 +133,6 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
@@ -178,10 +180,15 @@
                     type: 'GET',
                     dataType: 'json',
                     success: function (data) {
+                        console.log('User details:', data);
                         // Update the content of #showModalBody with the fetched details
                         var userDetailsHtml = '<p><strong>Name:</strong> ' + data.name + '</p>';
                         userDetailsHtml += '<p><strong>Email:</strong> ' + data.email + '</p>';
                         userDetailsHtml += '<p><strong>Role(s):</strong> ' + data.roles.join(', ') + '</p>';
+                        if (data.proof === null)
+                            userDetailsHtml += '<p><strong>Proof:</strong></p> <br>' + '<img alt="N/A" class="img-fluid" src="{{ asset('images/na.jpg') }}" >';
+                        else
+                            userDetailsHtml += '<p><strong>Proof:</strong></p> <br>' + '<img alt="Request Picture" class="img-fluid" src="/' + data.proof + '" >';
                         $('#showModalBody').html(userDetailsHtml);
                     },
                     error: function (error) {

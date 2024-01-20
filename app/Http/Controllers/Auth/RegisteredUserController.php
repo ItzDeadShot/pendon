@@ -30,32 +30,48 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+        try {
+            $request->validate([
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+                'password' => ['required', 'confirmed', Rules\Password::defaults()],
+                'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
+            ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+            // Handle file upload
+            $imagePath = $request->file('image')->store('images', 'public');
 
-        $user->assignRole('donee', 'donor');
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'proof' => $imagePath,
+            ]);
 
-        event(new Registered($user));
+            $user->assignRole('donee', 'donor');
 
-        Auth::login($user);
+            event(new Registered($user));
 
-        if ($user->isDonee()) {
-            return redirect()->route('/');
+            Auth::login($user);
+
+            if ($user->isDonee()) {
+                return redirect()->route('/');
+            }
+
+            if ($user->isDonor()) {
+                return redirect()->route('items');
+            }
+
+            return redirect(RouteServiceProvider::HOME);
+        } catch (ValidationException $e) {
+            // Validation failed
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch (\Exception $e) {
+            // Log the exception
+            \Log::error('Error creating user: ' . $e->getMessage());
+
+            // Redirect with an error message
+            return redirect()->route('register')->with('error', 'Error creating user. Please try again.');
         }
-
-        if ($user->isDonor()) {
-            return redirect()->route('items');
-        }
-
-        return redirect(RouteServiceProvider::HOME);
     }
 }

@@ -30,7 +30,7 @@
                                 <th>S.No.</th>
                                 <th>Name</th>
                                 <th>Description</th>
-                                <th>Price</th>
+{{--                                <th>Price</th>--}}
                                 <th>Photo</th>
                                 <th>Action</th>
                             </tr>
@@ -41,7 +41,7 @@
                                     <td>{{ $item->id }}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->description }}</td>
-                                    <td>RM {{ $item->price }}</td>
+{{--                                    <td>RM {{ $item->price }}</td>--}}
                                     <td>
                                         <img alt="Item Picture" class="img-fluid" src="{{ asset('/'.$item->photo_path) }}">
                                     </td>
@@ -87,18 +87,18 @@
                                 <label for="addDescription">Description</label>
                                 <textarea id="addDescription" name="description" class="form-control" rows="8" placeholder="Write item's description here." required></textarea>
                             </div>
-                        <div class="form-group">
-                            <label for="addPrice">Price (RM)</label>
-                            <input  type="number" min="1" step="any" id="addPrice" name="price" class="form-control" required>
-                        </div>
-                            <div class="stretch-card">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h6 class="card-title">Upload Image</h6>
-                                        <input type="file" id="myDropify" name="image" class="border" required/>
-                                    </div>
+{{--                        <div class="form-group">--}}
+{{--                            <label for="addPrice">Price (RM)</label>--}}
+{{--                            <input  type="number" min="1" step="any" id="addPrice" name="price" class="form-control" required>--}}
+{{--                        </div>--}}
+                        <div class="stretch-card">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6 class="card-title">Upload Image</h6>
+                                    <input type="file" id="myDropify" name="image" class="border" required/>
                                 </div>
                             </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Create Item</button>
@@ -155,10 +155,10 @@
                             <textarea id="description" name="description" class="form-control" rows="8" required></textarea>
                         </div>
 
-                        <div class="form-group">
-                            <label for="price">Price (RM)</label>
-                            <input  type="number" min="1" step="any" id="price" name="price" class="form-control" required>
-                        </div>
+{{--                        <div class="form-group">--}}
+{{--                            <label for="price">Price (RM)</label>--}}
+{{--                            <input  type="number" min="1" step="any" id="price" name="price" class="form-control" required>--}}
+{{--                        </div>--}}
 
                         <div class="stretch-card">
                             <div class="card">
@@ -287,10 +287,10 @@
 
                 $('#name').val(data[1]);
                 $('#description').val(data[2]);
-                $('#price').val(data[3].split(' ')[1]);
+                // $('#price').val(data[3].split(' ')[1]);
                 $('#updateDropify').dropify();
                 const pattern = /src="([^"]+)"/;
-                var match = data[4].match(pattern);
+                var match = data[3].match(pattern);
 
                 // Check if a match was found
                 if (match && match[1]) {
@@ -298,7 +298,7 @@
                     resetPreview('image', srcValue);
                     console.log(srcValue);
                 } else {
-                    console.log('No match found' + match + data[4]);
+                    console.log('No match found' + match + data[3]);
                 }
 
                 $('#updateForm').attr('action', '/items/' + data[0]);

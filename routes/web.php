@@ -39,6 +39,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     // Resource CRUD
     Route::resource('users', UserController::class)->except(['create', 'edit']);
+
+    Route::post('/users/{user}/approve', [UserController::class, 'approve'])->name('users.approve');
+    Route::post('/users/{user}/reject', [UserController::class, 'reject'])->name('users.reject');
+
     Route::resource('items', ItemController::class)->except(['create']);
     Route::resource('requests', RequestController::class)->except(['create', 'edit']);
 

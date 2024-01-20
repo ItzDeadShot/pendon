@@ -15,7 +15,7 @@
                         </div>
                         <div class="col-md-8 pl-md-0">
                             <div class="auth-form-wrapper px-4 py-5">
-                                <a href="#" class="noble-ui-logo logo-light d-block mb-2">Pen<span>Don</span></a>
+                                <a href="{{ route("/") }}" class="noble-ui-logo logo-light d-block mb-2">Pen<span>Don</span></a>
                                 <h5 class="text-muted font-weight-normal mb-4">Welcome back! Log in to your account.</h5>
                                 <form method="POST" action="{{ route('login') }}">
                                     @csrf

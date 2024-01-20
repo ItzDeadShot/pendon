@@ -58,17 +58,17 @@ class ItemController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:100',
-            'price' => 'required|numeric',
+//            'price' => 'required|numeric',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Adjust the allowed file types and size
         ]);
 
         // Handle file upload
         $imagePath = $request->file('image')->store('images', 'public');
-//        dd((float) $request->input('price'));
+
         $item = Item::create([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
-            'price' => (float) $request->input('price'),
+//            'price' => (float) $request->input('price'),
             'photo_path' => $imagePath,
             'user_id' => Auth::id(),
         ]);
@@ -90,7 +90,7 @@ class ItemController extends Controller
                 'id' => $item->id,
                 'name' => $item->name,
                 'description' => $item->description,
-                'price' => $item->price,
+//                'price' => $item->price,
                 'photo_path' => $item->photo_path,
             ];
             return response()->json($itemData);
