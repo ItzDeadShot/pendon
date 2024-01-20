@@ -47,7 +47,7 @@
                                 Request
                             </button>
                         @else
-                            <p class="mt-4 text-gray-500 dark:text-gray-400">Please <a href="{{ route('login') }}" class="font-bold" style="color: #b91c1c;">contact</a> the admin to complete verification.</p>
+                            <p class="mt-4 text-gray-500 dark:text-gray-400">Please <a href="mailto:admin@pendon.com" class="font-bold" style="color: #b91c1c;">contact</a> the admin to complete verification.</p>
                         @endif
                     @endguest
 
