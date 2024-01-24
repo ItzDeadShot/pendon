@@ -18,7 +18,22 @@ class ItemController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('role:donor|admin', ['only' => ['index', 'show', 'create', 'store', 'edit', 'update', 'destroy']]);
+        $this->middleware(function ($request, $next) {
+            // Check if the user is an admin
+            if ($request->user() && $request->user()->hasRole('admin')) {
+                return $next($request);
+            }
+
+            // Check if the user is a verified donor
+            if ($request->user() && $request->user()->hasRole('donor') && $request->user()->isVerified()) {
+                return $next($request);
+            }
+
+            // Redirect or handle unauthorized user
+            return response()->view("errors.401");
+        })->only(['index', 'show', 'create', 'store', 'edit', 'update', 'destroy']);
+
+//        $this->middleware('role:donor|admin', ['only' => ['index', 'show', 'create', 'store', 'edit', 'update', 'destroy']]);
     }
 
     /**

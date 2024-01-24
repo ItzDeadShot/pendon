@@ -49,13 +49,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/requests/request-item', [RequestController::class, 'storeFromItems'])->name('requests.item.store');
 });
 
-//Route::group(['middleware' => ['auth', 'role:admin']], function () {
-//});
-//
-//Route::group(['middleware' => ['role:admin', 'role:donor']], function () {
-//
-//});
-
 Route::post('/images', [ImageController::class, 'store']);
 //    ->middleware(['auth']);
 

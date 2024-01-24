@@ -55,11 +55,7 @@ class RegisteredUserController extends Controller
             Auth::login($user);
 
             if ($user->isDonee()) {
-                return redirect()->route('/');
-            }
-
-            if ($user->isDonor()) {
-                return redirect()->route('items');
+                return redirect()->route('/')->with('success', 'Your account has been created. Please contact an admin to verify your account.');
             }
 
             return redirect(RouteServiceProvider::HOME);
