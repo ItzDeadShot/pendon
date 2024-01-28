@@ -31,6 +31,10 @@ Route::get('/donated-items', function () {
     return view('items', compact('items'));
 })->name('donated-items');
 
+Route::get('/about', function () {
+   return view('about');
+})->name('about');
+
 
 Route::middleware('auth')->group(function () {
     // Profile CRUD
